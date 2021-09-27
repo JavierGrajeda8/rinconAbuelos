@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NavController } from '@ionic/angular';
 import { Producto } from 'src/app/core/interfaces/Producto';
 
 @Component({
@@ -8,7 +9,7 @@ import { Producto } from 'src/app/core/interfaces/Producto';
 })
 export class HomePage implements OnInit {
   private productos: Producto[] = [];
-  constructor() {}
+  constructor(private nav: NavController) {}
 
   ngOnInit() {
     this.productos.push(
@@ -37,5 +38,9 @@ export class HomePage implements OnInit {
         precioVenta: 31.0,
       }
     );
+  }
+
+  crear() {
+    this.nav.navigateForward('empresas/sucursal/categorias/productos/crear');
   }
 }

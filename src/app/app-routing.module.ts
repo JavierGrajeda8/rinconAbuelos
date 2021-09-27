@@ -9,7 +9,7 @@ const routes: Routes = [
   {
     path: 'empresas',
     loadChildren: () => import('./pages/empresa/empresa.module').then(m => m.EmpresaAppPageModule)
-  },
+  }
 ];
 
 @NgModule({

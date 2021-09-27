@@ -1,9 +1,65 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>home</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header [backButton]="true"></app-header>
 
 <ion-content>
-
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-padding-horizontal" size="12">
+        <ion-text color="primary">
+          <h1>Ventas</h1>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-list>
+          <ion-list>
+            <ion-item-sliding *ngFor="let venta of ventas">
+              <ion-item>
+                <ion-icon
+                  slot="end"
+                  name="create"
+                  (click)="gestionarVenta(venta)"
+                ></ion-icon>
+                <ion-icon
+                  slot="end"
+                  name="document-text"
+                  (click)="detalle(venta)"
+                ></ion-icon>
+                <ion-label>
+                  <ion-text color="secondary"> {{ venta.cliente }} </ion-text>
+                  <br />
+                  <ion-text color="medium">
+                    <small
+                      >Fecha venta: {{venta.fechaHora | date:'d/M/yy, h:mm
+                      a'}}</small
+                    ><br />
+                    <small
+                      >Factura: {{venta.serie }} -
+                      {{venta.numeroFactura}}</small
+                    ><br />
+                    <small>Total: Q {{venta.total }}</small>
+                  </ion-text>
+                </ion-label>
+              </ion-item>
+              <ion-item-options side="end">
+                <ion-item-option color="danger" (click)="borrar(venta)">
+                  <ion-icon slot="icon-only" name="trash"></ion-icon>
+                </ion-item-option>
+              </ion-item-options>
+            </ion-item-sliding>
+          </ion-list>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button color="success" (click)="gestionarVenta(null)">
+        <ion-icon slot="start" name="add"></ion-icon>
+        Nuevo venta
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

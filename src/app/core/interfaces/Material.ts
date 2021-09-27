@@ -4,10 +4,11 @@ import { Producto } from './Producto';
 export interface Material {
     idMaterial: number;
     nombre: string;
-    unidadMedida: number;
+    unidadMedida: string;
     descripcion: string;
     cantidad: number;
     costoPromedio: number;
+    caduca: boolean;
     estado: number;
     productos?: Producto[];
     materialDetalle?: MaterialDetalle[];

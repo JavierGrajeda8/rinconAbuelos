@@ -1,9 +1,240 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>crear</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header [backButton]="true"></app-header>
 
 <ion-content>
+  <form #form="ngForm">
+    <ion-list>
+      <ion-list-header>
+        <ion-label>Crear producto</ion-label>
+      </ion-list-header>
+      <ion-item>
+        <ion-label
+          >Nombre
+          <ion-text color="danger">*</ion-text>
+          ({{data.nombre?.length}}/100)</ion-label
+        >
+        <ion-input
+          class="ion-text-end"
+          placeholder="Ej. Hamburguesa"
+          [(ngModel)]="data.nombre"
+          #nombre="ngModel"
+          name="nombre"
+          id="nombre"
+          type="text"
+          maxlength="100"
+          required
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label
+          >Descripción
+          <ion-text color="danger">*</ion-text>
+          ({{data.descripcion?.length}}/200)</ion-label
+        >
+        <ion-textarea
+          class="ion-text-end"
+          placeholder="Ej. Hamburguesa con tomate, lechuga y cebolla"
+          [(ngModel)]="data.descripcion"
+          #descripcion="ngModel"
+          name="descripcion"
+          id="descripcion"
+          type="text"
+          maxlength="200"
+          required
+        ></ion-textarea>
+      </ion-item>
+      <ion-item>
+        <ion-label>Costo</ion-label>
+        <ion-input
+          class="ion-text-end"
+          placeholder="0.00"
+          [(ngModel)]="data.costo"
+          #costo="ngModel"
+          name="costo"
+          id="costo"
+          type="text"
+          required
+          readonly
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label
+          >Precio venta
+          <ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-input
+          class="ion-text-end"
+          placeholder="Ej. 25.50"
+          [(ngModel)]="data.precioVenta"
+          #precioVenta="ngModel"
+          name="precioVenta"
+          id="precioVenta"
+          type="number"
+          required
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label
+          >Categoría
+          <ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-select placeholder="Ej. Plato fuerte">
+          <ion-select-option
+            *ngFor="let categoria of categorias"
+            value="categoria.idCategoria"
+            >{{categoria.nombre}}</ion-select-option
+          >
+        </ion-select>
+      </ion-item>
+      <ion-list-header>
+        <ion-label>Detalle</ion-label>
+        <ion-button color="secondary" (click)="mostrarForm()">
+          <ion-icon slot="start" name="add"></ion-icon>
+          Agregar</ion-button
+        >
+      </ion-list-header>
+      <ng-container *ngIf="!data.agregandoDetalle">
+        
+        <ion-item *ngFor="let detalle of data.detalle">
+          <ion-badge slot="end" color="primary" mode="ios"
+            >{{detalle.cantidad}}</ion-badge
+          >
+          <ion-label
+            ><ion-text color="primary">
+              <h5>{{detalle.material.nombre}}</h5>
+            </ion-text>
 
+            <ion-text color="medium">
+              <p>Costo: {{detalle.costoPromedio}}</p>
+              <p>Aplica solo para llevar: SI</p>
+              <p>Afecta el precio: SI</p>
+            </ion-text>
+          </ion-label>
+          <ion-icon
+            slot="end"
+            (click)="eliminarDetalle(detalle)"
+            name="trash"
+            color="danger"
+          ></ion-icon>
+        </ion-item>
+      </ng-container>
+
+      <ng-container *ngIf="data.agregandoDetalle">
+        <ion-grid fixed>
+          <ion-row>
+            <ion-col size="12">
+              <ion-item>
+                <ion-label
+                  >Material
+                  <ion-text color="danger">*</ion-text>
+                </ion-label>
+                <ion-select
+                  placeholder="Ej. Plato fuerte"
+                  [(ngModel)]="data.detalle.idMaterial"
+                  #idMaterial="ngModel"
+                  name="idMaterial"
+                  id="idMaterial"
+                >
+                  <ion-select-option
+                    *ngFor="let material of materiales"
+                    value="{{material.idMaterial}}"
+                    >{{material.nombre}} -
+                    {{material.unidadMedida}}</ion-select-option
+                  >
+                </ion-select>
+              </ion-item>
+              <ion-item>
+                <ion-label
+                  >Cantidad
+                  <ion-text color="danger">*</ion-text>
+                </ion-label>
+                <ion-input
+                  class="ion-text-end"
+                  placeholder="Ej. 10"
+                  [(ngModel)]="data.detalle.cantidad"
+                  #cantidad="ngModel"
+                  name="cantidad"
+                  id="cantidad"
+                  type="number"
+                  required
+                ></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label>¿Aplica únicamente para llevar? </ion-label>
+                <ion-checkbox
+                  class="ion-text-end"
+                  [(ngModel)]="data.paraLlevar"
+                  #paraLlevar="ngModel"
+                  name="paraLlevar"
+                  id="paraLlevar"
+                  required
+                ></ion-checkbox>
+              </ion-item>
+              <ion-item>
+                <ion-label>¿Afecta el precio del producto? </ion-label>
+                <ion-checkbox
+                  class="ion-text-end"
+                  [(ngModel)]="data.afectaPrecio"
+                  #afectaPrecio="ngModel"
+                  name="afectaPrecio"
+                  id="afectaPrecio"
+                  required
+                ></ion-checkbox>
+              </ion-item>
+              <ion-item>
+                <ion-button
+                  slot="end"
+                  color="medium"
+                  (click)="mostrarForm()"
+                  fill="outline"
+                  shape="round"
+                >
+                  Cancelar
+                </ion-button>
+
+                <ion-button
+                  slot="end"
+                  color="secondary"
+                  (click)="agregarDetalle()"
+                  fill="outline"
+                  shape="round"
+                >
+                  Agregar detalle
+                </ion-button>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ng-container>
+    </ion-list>
+  </form>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="6">
+          <ion-button
+            (click)="cancelar()"
+            color="danger"
+            expand="block"
+            fill="clear"
+            shape="round"
+          >
+            Regresar
+          </ion-button>
+        </ion-col>
+        <ion-col size="6">
+          <ion-button
+            (click)="cancelar()"
+            color="primary"
+            expand="block"
+            shape="round"
+          >
+            Guardar
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>

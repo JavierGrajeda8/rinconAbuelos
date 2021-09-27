@@ -5,7 +5,7 @@
     <ion-row>
       <ion-col class="ion-padding-horizontal" size="12">
         <ion-text color="primary">
-          <h1>Materiales</h1>
+          <h1>Material detalle</h1>
         </ion-text>
       </ion-col>
     </ion-row>
@@ -13,20 +13,23 @@
       <ion-col size="12">
         <ion-list>
           <ion-list>
-            <ion-item-sliding
-              *ngFor="let material of materiales"
-              
-            >
+            <ion-item-sliding *ngFor="let material of materialDetalle">
               <ion-item>
-                <ion-icon slot="end" name="create" (click)="gestionarMaterial(material)"></ion-icon>
-                <ion-icon slot="end" name="document-text" (click)="detalle(material)"></ion-icon>
+                <ion-icon
+                  slot="end"
+                  name="document-text"
+                  (click)="detalle(material)"
+                ></ion-icon>
                 <ion-label>
-                  <ion-text color="secondary"> {{ material.nombre }}</ion-text>
+                  <ion-text color="secondary"
+                    >Cantidad: {{ material.cantida }}</ion-text
+                  >
                   <br />
                   <ion-text color="medium">
-                    <small>{{material.descripcion}}</small><br />
-                    <small>Inventario: {{material.cantidad}}</small><br />
-                    <small>Costo: {{material.costoPromedio}}</small><br />
+                    <small>{{material.lote}}</small><br />
+                    <small>Fecha compra: {{material.fecha | date:'d/M/yy, h:mm a'}}</small><br />
+                    <small>Fecha expiración: {{material.fechaExpiracion | date:'d/M/yy, h:mm a'}}</small
+                    ><br />
                     <br />
                   </ion-text>
                 </ion-label>
