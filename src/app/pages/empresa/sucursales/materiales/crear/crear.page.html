@@ -1,9 +1,136 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>crear</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header [backButton]="true"></app-header>
 
 <ion-content>
-
+  <form #form="ngForm">
+    <ion-list>
+      <ion-list-header>
+        <ion-label>Crear material</ion-label>
+      </ion-list-header>
+      <ion-item>
+        <ion-label
+          >Nombre
+          <ion-text color="danger">*</ion-text>
+          ({{data.nombre?.length}}/100)</ion-label
+        >
+        <ion-input
+          class="ion-text-end"
+          placeholder="Ej. Harina"
+          [(ngModel)]="data.nombre"
+          #nombre="ngModel"
+          name="nombre"
+          id="nombre"
+          type="text"
+          maxlength="100"
+          required
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label
+          >Descripción
+          <ion-text color="danger">*</ion-text>
+          ({{data.descripcion?.length}}/200)</ion-label
+        >
+        <ion-textarea
+          class="ion-text-end"
+          placeholder="Ej. Harina de "
+          [(ngModel)]="data.descripcion"
+          #descripcion="ngModel"
+          name="descripcion"
+          id="descripcion"
+          type="text"
+          maxlength="200"
+          required
+        ></ion-textarea>
+      </ion-item>
+      <ion-item>
+        <ion-label
+          >Unidad de medida
+          <ion-text color="danger">*</ion-text>
+          ({{data.nombre?.length}}/20)</ion-label
+        >
+        <ion-input
+          class="ion-text-end"
+          placeholder="Ej. Libra"
+          [(ngModel)]="data.unidadMedida"
+          #unidadMedida="ngModel"
+          name="unidadMedida"
+          id="unidadMedida"
+          type="text"
+          maxlength="20"
+          required
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Cantidad actual</ion-label>
+        <ion-input
+          class="ion-text-end"
+          placeholder="0.00"
+          [(ngModel)]="data.cantidad"
+          #cantidad="ngModel"
+          name="cantidad"
+          id="cantidad"
+          type="text"
+          required
+          readonly
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label
+          >Costo promedio
+          <ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-input
+          class="ion-text-end"
+          placeholder="Ej. 25.50"
+          [(ngModel)]="data.costoPromedio"
+          #costoPromedio="ngModel"
+          name="costoPromedio"
+          id="costoPromedio"
+          type="number"
+          required
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>¿Es perecedero? </ion-label>
+        <ion-checkbox
+          class="ion-text-end"
+          [(ngModel)]="data.caduca"
+          #caduca="ngModel"
+          name="caduca"
+          id="caduca"
+          required
+        ></ion-checkbox>
+      </ion-item>
+    </ion-list>
+  </form>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="6">
+          <ion-button
+            (click)="cancelar()"
+            color="danger"
+            expand="block"
+            fill="clear"
+            shape="round"
+          >
+            Regresar
+          </ion-button>
+        </ion-col>
+        <ion-col size="6">
+          <ion-button
+            (click)="cancelar()"
+            color="primary"
+            expand="block"
+            shape="round"
+          >
+            Guardar
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>

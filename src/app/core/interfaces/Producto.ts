@@ -1,4 +1,5 @@
 import { Categoria } from './Categoria';
+import { ProductoDetalle } from './ProductoDetalle';
 
 export interface Producto {
     idProducto: number;
@@ -9,4 +10,5 @@ export interface Producto {
     precioVenta: number;
     estado: number;
     categoria?: Categoria;
+    detalle?: ProductoDetalle;
 }

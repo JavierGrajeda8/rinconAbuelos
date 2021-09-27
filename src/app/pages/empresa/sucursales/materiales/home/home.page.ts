@@ -49,71 +49,73 @@ export class HomePage implements OnInit {
   }
 
   async gestionarMaterial(material: Material) {
-    this.material = material;
-    const alert = await this.alertController.create({
-      cssClass: 'my-custom-class',
-      header: material ? 'Editar material' : 'Agregar material',
-      message: 'Por favor ingresa la información de tu material:',
-      inputs: [
-        {
-          name: 'nombre',
-          type: 'text',
-          placeholder: 'Nombre (max. 100)',
-          attributes: {
-            maxlength: 100,
-            value: material ? material.nombre : '',
-          },
-        },
-        {
-          name: 'descripcion',
-          type: 'textarea',
-          placeholder: 'Descripción (max. 200)',
-          attributes: {
-            maxlength: 200,
-            value: material ? material.descripcion : '',
-          },
-        },
-        {
-          name: 'cantidad',
-          type: 'number',
-          placeholder: 'Inventario inicial',
-          attributes: {
-            value: material ? material.cantidad : '',
-          },
-        },
-        {
-          name: 'costo',
-          type: 'number',
-          placeholder: 'Costo',
-          attributes: {
-            value: material ? material.costoPromedio : '',
-          },
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: () => {
-            console.log('Confirm Cancel');
-          },
-        },
-        {
-          text: 'Agregar',
-          handler: (data) => {
-            console.log('Confirm Ok', data);
-            this.data.nombre = data.nombre;
-            this.data.descripcion = data.descripcion;
-            this.data.cantidad = data.cantidad;
-            this.data.costo = data.costo;
-            this.data.caduca = data.caduca;
-          },
-        },
-      ],
-    });
+    this.nav.navigateForward('empresas/sucursal/materiales/crear');
 
-    await alert.present();
+    // this.material = material;
+    // const alert = await this.alertController.create({
+    //   cssClass: 'my-custom-class',
+    //   header: material ? 'Editar material' : 'Agregar material',
+    //   message: 'Por favor ingresa la información de tu material:',
+    //   inputs: [
+    //     {
+    //       name: 'nombre',
+    //       type: 'text',
+    //       placeholder: 'Nombre (max. 100)',
+    //       attributes: {
+    //         maxlength: 100,
+    //         value: material ? material.nombre : '',
+    //       },
+    //     },
+    //     {
+    //       name: 'descripcion',
+    //       type: 'textarea',
+    //       placeholder: 'Descripción (max. 200)',
+    //       attributes: {
+    //         maxlength: 200,
+    //         value: material ? material.descripcion : '',
+    //       },
+    //     },
+    //     {
+    //       name: 'cantidad',
+    //       type: 'number',
+    //       placeholder: 'Inventario inicial',
+    //       attributes: {
+    //         value: material ? material.cantidad : '',
+    //       },
+    //     },
+    //     {
+    //       name: 'costo',
+    //       type: 'number',
+    //       placeholder: 'Costo',
+    //       attributes: {
+    //         value: material ? material.costoPromedio : '',
+    //       },
+    //     },
+    //   ],
+    //   buttons: [
+    //     {
+    //       text: 'Cancelar',
+    //       role: 'cancel',
+    //       cssClass: 'secondary',
+    //       handler: () => {
+    //         console.log('Confirm Cancel');
+    //       },
+    //     },
+    //     {
+    //       text: 'Agregar',
+    //       handler: (data) => {
+    //         console.log('Confirm Ok', data);
+    //         this.data.nombre = data.nombre;
+    //         this.data.descripcion = data.descripcion;
+    //         this.data.cantidad = data.cantidad;
+    //         this.data.costo = data.costo;
+    //         this.data.caduca = data.caduca;
+    //       },
+    //     },
+    //   ],
+    // });
+
+    // await alert.present();
   }
 
   detalle(material: Material) {

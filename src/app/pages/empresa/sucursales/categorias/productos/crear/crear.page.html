@@ -87,13 +87,24 @@
       </ion-item>
       <ion-list-header>
         <ion-label>Detalle</ion-label>
-        <ion-button color="secondary" (click)="mostrarForm()">
+        <ion-button
+          *ngIf="data.agregandoDetalle"
+          color="danger"
+          (click)="mostrarForm()"
+        >
+          <ion-icon slot="start" name="remove"></ion-icon>
+          Ocultar</ion-button
+        >
+        <ion-button
+          *ngIf="!data.agregandoDetalle"
+          color="secondary"
+          (click)="mostrarForm()"
+        >
           <ion-icon slot="start" name="add"></ion-icon>
           Agregar</ion-button
         >
       </ion-list-header>
       <ng-container *ngIf="!data.agregandoDetalle">
-        
         <ion-item *ngFor="let detalle of data.detalle">
           <ion-badge slot="end" color="primary" mode="ios"
             >{{detalle.cantidad}}</ion-badge

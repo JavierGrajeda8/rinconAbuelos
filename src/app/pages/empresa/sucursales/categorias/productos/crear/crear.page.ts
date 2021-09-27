@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { Categoria } from 'src/app/core/interfaces/Categoria';
 import { Material } from 'src/app/core/interfaces/Material';
 
@@ -24,7 +24,10 @@ export class CrearPage implements OnInit {
 
   public categorias: Categoria[] = [];
   public materiales: Material[] = [];
-  constructor(private alertController: AlertController) {}
+  constructor(
+    private alertController: AlertController,
+    private nav: NavController
+  ) {}
 
   ngOnInit() {
     this.categorias.push(
@@ -131,5 +134,9 @@ export class CrearPage implements OnInit {
       ],
     });
     alert.present();
+  }
+
+  cancelar() {
+    this.nav.pop();
   }
 }

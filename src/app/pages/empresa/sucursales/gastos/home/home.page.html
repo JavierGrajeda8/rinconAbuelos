@@ -26,11 +26,13 @@
                   (click)="detalle(gasto)"
                 ></ion-icon>
                 <ion-label>
-                  <ion-text color="secondary">
-                    {{ gasto.serieFactura }} - {{gasto.numeroFactura}}</ion-text
-                  >
+                  <ion-text color="secondary">{{gasto.proveedor}}</ion-text>
                   <br />
                   <ion-text color="medium">
+                    <small
+                      >Factura {{ gasto.serieFactura }} -
+                      {{gasto.numeroFactura}} </small
+                    ><br />
                     <small
                       >Fecha gasto: {{gasto.fechaHora | date:'d/M/yy, h:mm
                       a'}}</small

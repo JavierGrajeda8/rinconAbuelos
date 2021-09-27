@@ -17,6 +17,8 @@ export class HomePage implements OnInit {
       idSucursal: 0,
       idUsuario: 0,
       serieFactura: 'A',
+      fechaFactura: Date.now(),
+      proveedor: 'El buen samaritano',
       numeroFactura: '12346',
       fechaHora: Date.now(),
       estado: 0,
@@ -27,8 +29,14 @@ export class HomePage implements OnInit {
       idUsuario: 0,
       serieFactura: 'B',
       numeroFactura: '789456',
+      fechaFactura: Date.now(),
+      proveedor: 'El buen precio',
       fechaHora: Date.now(),
       estado: 0,
     });
+  }
+
+  private gestionarGasto() {
+    this.nav.navigateForward('empresas/sucursal/gastos/crear');
   }
 }

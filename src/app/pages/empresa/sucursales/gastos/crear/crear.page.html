@@ -1,9 +1,253 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>crear</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header [backButton]="true"></app-header>
 
 <ion-content>
+  <form #form="ngForm">
+    <ion-list>
+      <ion-list-header>
+        <ion-label>Nuevo gasto</ion-label>
+      </ion-list-header>
+      <ion-item>
+        <ion-label
+          >Serie factura
+          <ion-text color="danger">*</ion-text>
+          ({{data.serieFactura?.length}}/30)</ion-label
+        >
+        <ion-input
+          class="ion-text-end"
+          placeholder="Ej. B-1"
+          [(ngModel)]="data.serieFactura"
+          #serieFactura="ngModel"
+          name="serieFactura"
+          id="serieFactura"
+          type="text"
+          maxlength="30"
+          required
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label
+          >Número de factura
+          <ion-text color="danger">*</ion-text>
+          ({{data.numeroFactura?.length}}/30)</ion-label
+        >
+        <ion-input
+          class="ion-text-end"
+          placeholder="Ej. 1234567890"
+          [(ngModel)]="data.numeroFactura"
+          #numeroFactura="ngModel"
+          name="numeroFactura"
+          id="numeroFactura"
+          type="text"
+          maxlength="30"
+          required
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label
+          >Fecha de factura
+          <ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-datetime
+          class="ion-text-end"
+          placeholder="Ej. 14/08/2021"
+          [(ngModel)]="data.fechaFactura"
+          #fechaFactura="ngModel"
+          name="fechaFactura"
+          id="fechaFactura"
+          type="text"
+          required
+          display-format="DD.MM.YYYY"
+        ></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label
+          >Proveedor
+          <ion-text color="danger">*</ion-text>
+          ({{data.proveedor?.length}}/100)</ion-label
+        >
+        <ion-textarea
+          class="ion-text-end"
+          placeholder="Ej. Frutas y verduras S.A."
+          [(ngModel)]="data.proveedor"
+          #proveedor="ngModel"
+          name="proveedor"
+          id="proveedor"
+          type="text"
+          maxlength="100"
+          required
+        ></ion-textarea>
+      </ion-item>
 
+      <ion-list-header>
+        <ion-label>Detalle</ion-label>
+        <ion-button
+          *ngIf="data.agregandoDetalle"
+          color="danger"
+          (click)="mostrarForm()"
+        >
+          <ion-icon slot="start" name="remove"></ion-icon>
+          Ocultar</ion-button
+        >
+        <ion-button
+          *ngIf="!data.agregandoDetalle"
+          color="secondary"
+          (click)="mostrarForm()"
+        >
+          <ion-icon slot="start" name="add"></ion-icon>
+          Agregar</ion-button
+        >
+      </ion-list-header>
+      <ng-container *ngIf="!data.agregandoDetalle">
+        <ion-item *ngFor="let detalle of data.detalle">
+          <ion-badge slot="end" color="primary" mode="ios"
+            >{{detalle.cantidad}}</ion-badge
+          >
+          <ion-label
+            ><ion-text color="primary">
+              <h5>{{detalle.material.nombre}}</h5>
+            </ion-text>
+
+            <ion-text color="medium">
+              <p>Costo: {{detalle.precioUnitario}}</p>
+            </ion-text>
+          </ion-label>
+          <ion-icon
+            slot="end"
+            (click)="eliminarDetalle(detalle)"
+            name="trash"
+            color="danger"
+          ></ion-icon>
+        </ion-item>
+      </ng-container>
+
+      <ng-container *ngIf="data.agregandoDetalle">
+        <ion-grid fixed>
+          <ion-row>
+            <ion-col size="12">
+              <ion-item>
+                <ion-label
+                  >Material
+                  <ion-text color="danger">*</ion-text>
+                </ion-label>
+                <ion-select
+                  placeholder="Ej. Cebolla"
+                  (ionChange)="elegirMaterial()"
+                  [(ngModel)]="dataDetalle.idMaterial"
+                  #idMaterial="ngModel"
+                  name="idMaterial"
+                  id="idMaterial"
+                >
+                  <ion-select-option
+                    *ngFor="let material of materiales"
+                    value="{{material.idMaterial}}"
+                    >{{material.nombre}} -
+                    {{material.unidadMedida}}</ion-select-option
+                  >
+                </ion-select>
+              </ion-item>
+              <ion-item>
+                <ion-label
+                  >Cantidad
+                  <ion-text color="danger">*</ion-text>
+                </ion-label>
+                <ion-input
+                  class="ion-text-end"
+                  placeholder="Ej. 10"
+                  [(ngModel)]="dataDetalle.cantidad"
+                  #cantidad="ngModel"
+                  name="cantidad"
+                  id="cantidad"
+                  type="number"
+                  required
+                ></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label
+                  >Precio unitario
+                  <ion-text color="danger">*</ion-text>
+                </ion-label>
+                <ion-input
+                  class="ion-text-end"
+                  placeholder="Ej. 10"
+                  [(ngModel)]="dataDetalle.precioUnitario"
+                  #precioUnitario="ngModel"
+                  name="precioUnitario"
+                  id="precioUnitario"
+                  type="number"
+                  required
+                ></ion-input>
+              </ion-item>
+              <ion-item *ngIf="dataDetalle.caduca">
+                <ion-label
+                  >Fecha de caducidad
+                  <ion-text color="danger">*</ion-text>
+                </ion-label>
+                <ion-datetime
+                  class="ion-text-end"
+                  placeholder="Ej. 27.09.2021"
+                  [(ngModel)]="dataDetalle.fechaCaducidad"
+                  #fechaCaducidad="ngModel"
+                  name="fechaCaducidad"
+                  id="fechaCaducidad"
+                  display-format="DD.MM.YYYY"
+                  required
+                ></ion-datetime>
+              </ion-item>
+              <ion-item>
+                <ion-button
+                  slot="end"
+                  color="medium"
+                  (click)="mostrarForm()"
+                  fill="outline"
+                  shape="round"
+                >
+                  Cancelar
+                </ion-button>
+
+                <ion-button
+                  slot="end"
+                  color="secondary"
+                  (click)="agregarDetalle()"
+                  fill="outline"
+                  shape="round"
+                >
+                  Agregar detalle
+                </ion-button>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ng-container>
+    </ion-list>
+  </form>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="6">
+          <ion-button
+            (click)="cancelar()"
+            color="danger"
+            expand="block"
+            fill="clear"
+            shape="round"
+          >
+            Regresar
+          </ion-button>
+        </ion-col>
+        <ion-col size="6">
+          <ion-button
+            (click)="cancelar()"
+            color="primary"
+            expand="block"
+            shape="round"
+          >
+            Guardar
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>
