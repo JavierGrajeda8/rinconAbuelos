@@ -1,5 +1,7 @@
 {
   "name": "RinconAbuelos",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
