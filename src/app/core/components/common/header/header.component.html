@@ -11,7 +11,7 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title>Rincon de los Abuelos</ion-title>
-    <ion-buttons slot="end">
+    <ion-buttons *ngIf="connected" slot="end">
       <ion-icon
         (click)="logOff()"
         color="danger"

@@ -8,6 +8,7 @@ import { AlertController, NavController } from '@ionic/angular';
 })
 export class HeaderComponent implements OnInit {
   @Input() backButton = false;
+  @Input() connected = true;
 
   constructor(private nav: NavController, private alertCtrl: AlertController) {
     console.log('backbutton', this.backButton);
