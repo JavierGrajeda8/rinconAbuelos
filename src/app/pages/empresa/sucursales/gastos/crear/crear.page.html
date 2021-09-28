@@ -106,9 +106,11 @@
             ><ion-text color="primary">
               <h5>{{detalle.material.nombre}}</h5>
             </ion-text>
-
             <ion-text color="medium">
               <p>Costo: {{detalle.precioUnitario}}</p>
+              <p *ngIf="detalle.fechaCaducidad">
+                Fecha caducidad: {{detalle.fechaCaducidad | date:'d/M/yy'}}
+              </p>
             </ion-text>
           </ion-label>
           <ion-icon
@@ -117,6 +119,28 @@
             name="trash"
             color="danger"
           ></ion-icon>
+        </ion-item>
+        <ion-item>
+          <ion-label slot="start">
+            <ion-text color="tertiary">
+              <h2>Cantidad total:</h2>
+            </ion-text>
+          </ion-label>
+          <ion-label class="ion-text-wrap ion-text-end" slot="end">
+            <ion-text color="dark"> <b>{{data.cantidadTotal}}</b> </ion-text>
+          </ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label slot="start">
+            <ion-text color="tertiary">
+              <h2>Gasto total:</h2>
+            </ion-text>
+          </ion-label>
+          <ion-label class="ion-text-wrap ion-text-end" slot="end">
+            <ion-text color="dark">
+              <b>{{data.precioTotal | currency:'Q'}}</b>
+            </ion-text>
+          </ion-label>
         </ion-item>
       </ng-container>
 

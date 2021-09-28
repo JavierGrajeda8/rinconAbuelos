@@ -12,8 +12,10 @@ export interface Venta {
     direccion: string;
     total: number;
     correo: string;
-    serie: string;
+    serieFactura: string;
     numeroFactura: string;
+    fechaFactura: number;
+    descripcion?: string;
     estado: number;
     ventaDetalle?: VentaDetalle[];
     usuario?: Usuario;

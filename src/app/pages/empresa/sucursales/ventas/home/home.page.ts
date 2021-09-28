@@ -23,8 +23,9 @@ export class HomePage implements OnInit {
         direccion: 'ciudad',
         total: 174.5,
         correo: '',
-        serie: 'B',
+        serieFactura: 'B',
         numeroFactura: '1',
+        fechaFactura: Date.now(),
         estado: 0,
       },
       {
@@ -37,10 +38,15 @@ export class HomePage implements OnInit {
         direccion: 'ciudad',
         total: 55.48,
         correo: '',
-        serie: 'B',
+        serieFactura: 'B',
         numeroFactura: '2',
+        fechaFactura: Date.now(),
         estado: 0,
       }
     );
+  }
+
+  gestionarVenta() {
+    this.nav.navigateForward('empresas/sucursal/ventas/crear');
   }
 }

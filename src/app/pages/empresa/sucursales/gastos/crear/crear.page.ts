@@ -18,6 +18,8 @@ export class CrearPage implements OnInit {
     proveedor: '',
     fechaHora: null,
     estado: null,
+    cantidadTotal: null,
+    precioTotal: null,
     categoria: null,
     detalle: [],
     agregandoDetalle: false,
@@ -75,6 +77,7 @@ export class CrearPage implements OnInit {
         precioUnitario: 15.45,
         fechaHora: Date.now(),
         estado: 0,
+        fechaCaducidad: Date.now(),
         material: { nombre: 'Harina', caduca: true },
       },
       {
@@ -88,6 +91,7 @@ export class CrearPage implements OnInit {
         material: { nombre: 'Manzana', caduca: false },
       }
     );
+    this.calcularTotal();
   }
 
   mostrarForm() {
@@ -99,9 +103,11 @@ export class CrearPage implements OnInit {
       // eslint-disable-next-line eqeqeq
       (ma) => ma.idMaterial == this.dataDetalle.idMaterial
     );
-    if (material){
-      if (material.length === 1){
-        this.dataDetalle.caduca =  material[0].caduca ? material[0].caduca: false;
+    if (material) {
+      if (material.length === 1) {
+        this.dataDetalle.caduca = material[0].caduca
+          ? material[0].caduca
+          : false;
       }
     }
   }
@@ -131,8 +137,9 @@ export class CrearPage implements OnInit {
               this.data.detalle.indexOf(
                 this.data.detalle.find((r) => r.id === detalle.id)
               ),
-              1
             );
+            this.calcularTotal();
+
             console.log('Confirm Okay', detalle.id);
           },
         },
@@ -146,22 +153,32 @@ export class CrearPage implements OnInit {
       // eslint-disable-next-line eqeqeq
       (ma) => ma.idMaterial == this.dataDetalle.idMaterial
     );
-    if (material){
-      if (material.length === 1){
-        this.dataDetalle.caduca =  material[0].caduca ? material[0].caduca: false;
-      }
-    }
     this.data.detalle.push({
       idGasto: 1,
-      idMaterial: 2,
+      idMaterial: this.dataDetalle.idMaterial,
       descripcion: '',
-      cantidad: 10,
-      precioUnitario: 15.45,
+      cantidad: this.dataDetalle.cantidad,
+      precioUnitario: this.dataDetalle.precioUnitario,
       fechaHora: Date.now(),
       estado: 0,
-      material: { nombre: material[0].nombre, caduca: material[0].caduca   },
+      fechaCaducidad: this.dataDetalle.fechaCaducidad,
+      material: {
+        nombre: material[0].nombre,
+        caduca: material[0].caduca,
+        fechaCaducidad: this.dataDetalle.fechaCaducidad,
+      },
     });
+    this.calcularTotal();
     this.data.agregandoDetalle = !this.data.agregandoDetalle;
+  }
+
+  calcularTotal(){
+    this.data.cantidadTotal = 0;
+    this.data.precioTotal = 0;
+    this.data.detalle.forEach((detalle) => {
+      this.data.cantidadTotal += detalle.cantidad;
+      this.data.precioTotal += detalle.cantidad * detalle.precioUnitario;
+    });
   }
 
   cancelar() {
