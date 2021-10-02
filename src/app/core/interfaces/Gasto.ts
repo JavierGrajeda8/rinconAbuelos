@@ -4,7 +4,7 @@ import { Usuario } from './Usuario';
 
 export interface Gasto {
     idGasto: number;
-    idUsuario: number;
+    idUsuario: string;
     idSucursal: number;
     serieFactura: string;
     numeroFactura: string;

@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
+import { ConstStrings } from 'src/app/core/constants/constStrings';
+import { Usuario } from 'src/app/core/interfaces/Usuario';
+import { StorageService } from 'src/app/shared/services/storage/storage.service';
 
 @Component({
   selector: 'app-home',
@@ -7,9 +10,14 @@ import { NavController } from '@ionic/angular';
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
-  constructor(private nav: NavController) {}
+  public usuario: Usuario;
+  constructor(private nav: NavController, private storage: StorageService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.storage.get(ConstStrings.str.storage.user).then((usuario: string) => {
+      this.usuario = JSON.parse(usuario) as Usuario;
+    });
+  }
 
   productos() {
     this.nav.navigateForward('empresas/sucursal/categorias');

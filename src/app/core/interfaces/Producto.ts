@@ -10,5 +10,5 @@ export interface Producto {
     precioVenta: number;
     estado: number;
     categoria?: Categoria;
-    detalle?: ProductoDetalle;
+    detalle?: ProductoDetalle[];
 }

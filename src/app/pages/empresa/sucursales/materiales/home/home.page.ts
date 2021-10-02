@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, NavController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
+import { ConstStrings } from 'src/app/core/constants/constStrings';
 import { Material } from 'src/app/core/interfaces/Material';
+import { Usuario } from 'src/app/core/interfaces/Usuario';
+import { StorageService } from 'src/app/shared/services/storage/storage.service';
+import { MaterialService } from 'src/app/core/services/materiales/material.service';
 
 @Component({
   selector: 'app-home',
@@ -16,106 +21,55 @@ export class HomePage implements OnInit {
     cantidad: null,
     costo: null,
     idEstado: 0,
-    caduca: null
+    caduca: null,
   };
+  public usuario: Usuario;
+  private subscription: Subscription;
+
   constructor(
     private nav: NavController,
-    private alertController: AlertController
+    private storage: StorageService,
+    private materialService: MaterialService
   ) {}
 
-  ngOnInit() {
-    this.materiales.push(
-      {
-        idMaterial: 0,
-        nombre: 'Harina',
-        unidadMedida: 'oz',
-        descripcion: 'Harina para pan',
-        cantidad: 150,
-        caduca: true,
-        costoPromedio: 10.5,
-        estado: 1,
-      },
-      {
-        idMaterial: 0,
-        nombre: 'Carne de hamburguesa',
-        unidadMedida: 'unidad',
-        descripcion: 'Torta de carne para hamburguesa',
-        cantidad: 10,
-        caduca: true,
-        costoPromedio: 12.5,
-        estado: 1,
-      }
-    );
+  ngOnInit() {}
+
+  ionViewWillEnter() {
+    this.storage.get(ConstStrings.str.storage.user).then((usuario: string) => {
+      this.usuario = JSON.parse(usuario) as Usuario;
+      this.getMateriales();
+    });
+  }
+
+  ionViewWillLeave() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+
+  getMateriales() {
+    this.subscription = this.materialService
+      .getMateriales(this.usuario)
+      .subscribe((materiales) => {
+        this.materiales = [];
+
+        console.log(materiales);
+        materiales.forEach((mat) => {
+          this.materiales.push(mat as Material);
+        });
+        this.materiales = this.materiales.sort((a, b) =>
+          b.nombre < a.nombre ? 1 : -1
+        );
+      });
   }
 
   async gestionarMaterial(material: Material) {
+    console.log('material', material);
+    await this.storage.set(
+      ConstStrings.str.storage.material,
+      JSON.stringify(material)
+    );
     this.nav.navigateForward('empresas/sucursal/materiales/crear');
-
-    // this.material = material;
-    // const alert = await this.alertController.create({
-    //   cssClass: 'my-custom-class',
-    //   header: material ? 'Editar material' : 'Agregar material',
-    //   message: 'Por favor ingresa la información de tu material:',
-    //   inputs: [
-    //     {
-    //       name: 'nombre',
-    //       type: 'text',
-    //       placeholder: 'Nombre (max. 100)',
-    //       attributes: {
-    //         maxlength: 100,
-    //         value: material ? material.nombre : '',
-    //       },
-    //     },
-    //     {
-    //       name: 'descripcion',
-    //       type: 'textarea',
-    //       placeholder: 'Descripción (max. 200)',
-    //       attributes: {
-    //         maxlength: 200,
-    //         value: material ? material.descripcion : '',
-    //       },
-    //     },
-    //     {
-    //       name: 'cantidad',
-    //       type: 'number',
-    //       placeholder: 'Inventario inicial',
-    //       attributes: {
-    //         value: material ? material.cantidad : '',
-    //       },
-    //     },
-    //     {
-    //       name: 'costo',
-    //       type: 'number',
-    //       placeholder: 'Costo',
-    //       attributes: {
-    //         value: material ? material.costoPromedio : '',
-    //       },
-    //     },
-    //   ],
-    //   buttons: [
-    //     {
-    //       text: 'Cancelar',
-    //       role: 'cancel',
-    //       cssClass: 'secondary',
-    //       handler: () => {
-    //         console.log('Confirm Cancel');
-    //       },
-    //     },
-    //     {
-    //       text: 'Agregar',
-    //       handler: (data) => {
-    //         console.log('Confirm Ok', data);
-    //         this.data.nombre = data.nombre;
-    //         this.data.descripcion = data.descripcion;
-    //         this.data.cantidad = data.cantidad;
-    //         this.data.costo = data.costo;
-    //         this.data.caduca = data.caduca;
-    //       },
-    //     },
-    //   ],
-    // });
-
-    // await alert.present();
   }
 
   detalle(material: Material) {

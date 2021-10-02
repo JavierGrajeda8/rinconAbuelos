@@ -1,4 +1,4 @@
-<app-header [backButton]="true"></app-header>
+<app-header (click)="presentToastWithOptions()" [backButton]="true"></app-header>
 
 <ion-content>
   <form #form="ngForm">
@@ -46,7 +46,7 @@
         <ion-label
           >Unidad de medida
           <ion-text color="danger">*</ion-text>
-          ({{data.nombre?.length}}/20)</ion-label
+          ({{data.unidadMedida?.length}}/20)</ion-label
         >
         <ion-input
           class="ion-text-end"
@@ -122,7 +122,7 @@
         </ion-col>
         <ion-col size="6">
           <ion-button
-            (click)="cancelar()"
+            (click)="crear()"
             color="primary"
             expand="block"
             shape="round"

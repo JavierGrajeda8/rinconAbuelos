@@ -2,6 +2,7 @@ import { Gasto } from './Gasto';
 import { Material } from './Material';
 
 export interface GastoDetalle {
+    idGastoDetalle: number;
     idGasto: number;
     idMaterial: number;
     descripcion: string;

@@ -3,6 +3,7 @@ import { Producto } from './Producto';
 
 export interface Material {
     idMaterial: number;
+    idSucursal?: number;
     nombre: string;
     unidadMedida: string;
     descripcion: string;

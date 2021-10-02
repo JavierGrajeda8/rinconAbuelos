@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
+import { ConstStrings } from 'src/app/core/constants/constStrings';
+import { Categoria } from 'src/app/core/interfaces/Categoria';
 import { Producto } from 'src/app/core/interfaces/Producto';
+import { Usuario } from 'src/app/core/interfaces/Usuario';
+import { ProductoService } from 'src/app/core/services/productos/producto.service';
+import { StorageService } from 'src/app/shared/services/storage/storage.service';
 
 @Component({
   selector: 'app-home',
@@ -8,39 +14,54 @@ import { Producto } from 'src/app/core/interfaces/Producto';
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
+  usuario: Usuario;
+  categoria: Categoria;
+  subscription: Subscription;
   private productos: Producto[] = [];
-  constructor(private nav: NavController) {}
+  constructor(
+    private nav: NavController,
+    private storage: StorageService,
+    private productoService: ProductoService
+  ) {}
 
-  ngOnInit() {
-    this.productos.push(
-      {
-        idProducto: 1,
-        idCategoria: 1,
-        nombre: 'Hamburguesa de la casa',
-        estado: 0,
-        costo: 24.6,
-        precioVenta: 26.0,
-      },
-      {
-        idProducto: 1,
-        idCategoria: 1,
-        nombre: 'Hamburguesa con queso',
-        estado: 0,
-        costo: 25.6,
-        precioVenta: 28.0,
-      },
-      {
-        idProducto: 1,
-        idCategoria: 1,
-        nombre: 'Hamburguesa con tocino',
-        estado: 0,
-        costo: 28.35,
-        precioVenta: 31.0,
-      }
-    );
+  ngOnInit() {}
+
+  ionViewWillEnter() {
+    this.storage.get(ConstStrings.str.storage.user).then((usuario: string) => {
+      this.usuario = JSON.parse(usuario) as Usuario;
+      this.storage
+        .get(ConstStrings.str.storage.categoria)
+        .then((categoria: string) => {
+          this.categoria = JSON.parse(categoria) as Categoria;
+          this.getProductos();
+        });
+    });
   }
 
-  crear() {
+  ionViewWillLeave() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+
+  getProductos() {
+    this.subscription = this.productoService
+      .getProductos(this.usuario, this.categoria)
+      .subscribe((productos) => {
+        console.log('productos', productos);
+        this.productos = [];
+        productos.forEach((producto) => {
+          this.productos.push(producto as Producto);
+        });
+      });
+  }
+
+  async crear(producto) {
+    console.log('producto', producto);
+    await this.storage.set(
+      ConstStrings.str.storage.producto,
+      JSON.stringify(producto)
+    );
     this.nav.navigateForward('empresas/sucursal/categorias/productos/crear');
   }
 }

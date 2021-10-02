@@ -77,11 +77,17 @@
           >Categoría
           <ion-text color="danger">*</ion-text>
         </ion-label>
-        <ion-select placeholder="Ej. Plato fuerte">
+        <ion-select
+          [(ngModel)]="data.idCategoria"
+          #idCategoria="ngModel"
+          name="idCategoria"
+          id="idCategoria"
+          placeholder="Ej. Plato fuerte"
+        >
           <ion-select-option
-            *ngFor="let categoria of categorias"
-            value="categoria.idCategoria"
-            >{{categoria.nombre}}</ion-select-option
+            *ngFor="let cat of categorias"
+            value="{{cat.idCategoria}}"
+            >{{cat.nombre}}</ion-select-option
           >
         </ion-select>
       </ion-item>
@@ -139,8 +145,9 @@
                   <ion-text color="danger">*</ion-text>
                 </ion-label>
                 <ion-select
-                  placeholder="Ej. Plato fuerte"
-                  [(ngModel)]="data.detalle.idMaterial"
+                  placeholder="Ej. Pan"
+                  (ionChange)="elegirMaterial()"
+                  [(ngModel)]="dataDetalle.idMaterial"
                   #idMaterial="ngModel"
                   name="idMaterial"
                   id="idMaterial"
@@ -153,6 +160,24 @@
                   >
                 </ion-select>
               </ion-item>
+              <ion-item *ngIf="material">
+                <ion-label slot="end" class="ion-text-wrap ion-text-end">
+                  <small>
+                    <ion-text color="tertiary"> Material: </ion-text>
+                    {{material?.nombre}}
+                  </small>
+                  <br />
+                  <small>
+                    <ion-text color="tertiary"> Costo: </ion-text>
+                    {{material?.costoPromedio | currency:'Q'}}
+                  </small>
+                  <br />
+                  <small>
+                    <ion-text color="tertiary"> Unidad de medida: </ion-text>
+                    {{material?.unidadMedida}}</small
+                  >
+                </ion-label>
+              </ion-item>
               <ion-item>
                 <ion-label
                   >Cantidad
@@ -161,7 +186,7 @@
                 <ion-input
                   class="ion-text-end"
                   placeholder="Ej. 10"
-                  [(ngModel)]="data.detalle.cantidad"
+                  [(ngModel)]="dataDetalle.cantidad"
                   #cantidad="ngModel"
                   name="cantidad"
                   id="cantidad"
@@ -173,7 +198,7 @@
                 <ion-label>¿Aplica únicamente para llevar? </ion-label>
                 <ion-checkbox
                   class="ion-text-end"
-                  [(ngModel)]="data.paraLlevar"
+                  [(ngModel)]="dataDetalle.paraLlevar"
                   #paraLlevar="ngModel"
                   name="paraLlevar"
                   id="paraLlevar"
@@ -184,7 +209,7 @@
                 <ion-label>¿Afecta el precio del producto? </ion-label>
                 <ion-checkbox
                   class="ion-text-end"
-                  [(ngModel)]="data.afectaPrecio"
+                  [(ngModel)]="dataDetalle.afectaPrecio"
                   #afectaPrecio="ngModel"
                   name="afectaPrecio"
                   id="afectaPrecio"
@@ -203,6 +228,7 @@
                 </ion-button>
 
                 <ion-button
+                  [disabled]="!dataDetalle.idMaterial || !dataDetalle.cantidad"
                   slot="end"
                   color="secondary"
                   (click)="agregarDetalle()"
@@ -237,7 +263,8 @@
         </ion-col>
         <ion-col size="6">
           <ion-button
-            (click)="cancelar()"
+            [disabled]="!form.valid"
+            (click)="guardar()"
             color="primary"
             expand="block"
             shape="round"

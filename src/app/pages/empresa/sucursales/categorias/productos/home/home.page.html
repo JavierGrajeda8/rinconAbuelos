@@ -5,7 +5,7 @@
     <ion-row>
       <ion-col class="ion-padding-horizontal" size="12">
         <ion-text color="primary">
-          <h1>Platos fuertes</h1>
+          <h1>{{ categoria?.nombre }}</h1>
         </ion-text>
       </ion-col>
     </ion-row>
@@ -13,18 +13,23 @@
       <ion-col size="12">
         <ion-list>
           <ion-list>
-            <ion-item-sliding
-              *ngFor="let producto of productos"
-              (click)="irProducto('idCategoria')"
-            >
+            <ion-item-sliding *ngFor="let producto of productos">
               <ion-item>
-                <ion-icon slot="end" name="create"></ion-icon>
-                <ion-label>
+                <ion-icon
+                  slot="end"
+                  name="create"
+                  (click)="crear(producto)"
+                ></ion-icon>
+                <ion-label class="ion-text-">
                   <ion-text color="secondary"> {{ producto.nombre }} </ion-text>
                   <br />
                   <ion-text color="medium">
-                    <small>Costo: Q {{producto.costo}}</small><br />
-                    <small>Precio venta: Q {{producto.precioVenta}}</small
+                    <small>Descripción: {{producto.descripcion}}</small><br />
+                    <small>Costo: {{producto.costo | currency:'Q'}}</small
+                    ><br />
+                    <small
+                      >Precio venta: {{producto.precioVenta|
+                      currency:'Q'}}</small
                     ><br />
                   </ion-text>
                 </ion-label>
@@ -35,7 +40,6 @@
                 </ion-item-option>
               </ion-item-options>
             </ion-item-sliding>
-            
           </ion-list>
         </ion-list>
       </ion-col>
@@ -45,7 +49,7 @@
 <ion-footer>
   <ion-toolbar>
     <ion-buttons slot="end">
-      <ion-button color="success" (click)="crear()">
+      <ion-button color="success" (click)="crear(producto)">
         <ion-icon slot="start" name="add"></ion-icon>
         Nuevo producto
       </ion-button>

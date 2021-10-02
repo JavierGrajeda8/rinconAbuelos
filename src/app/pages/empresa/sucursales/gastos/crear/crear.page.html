@@ -192,7 +192,7 @@
                 </ion-label>
                 <ion-input
                   class="ion-text-end"
-                  placeholder="Ej. 10"
+                  placeholder="Ej. 15.50"
                   [(ngModel)]="dataDetalle.precioUnitario"
                   #precioUnitario="ngModel"
                   name="precioUnitario"
@@ -230,6 +230,7 @@
 
                 <ion-button
                   slot="end"
+                  [disabled]="!dataDetalle.idMaterial || !dataDetalle.cantidad || !dataDetalle.precioUnitario || (dataDetalle.caduca && !dataDetalle.fechaCaducidad)"
                   color="secondary"
                   (click)="agregarDetalle()"
                   fill="outline"
@@ -263,7 +264,7 @@
         </ion-col>
         <ion-col size="6">
           <ion-button
-            (click)="cancelar()"
+            (click)="guardar()"
             color="primary"
             expand="block"
             shape="round"

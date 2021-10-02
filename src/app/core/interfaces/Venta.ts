@@ -4,7 +4,7 @@ import { VentaDetalle } from './VentaDetalle';
 
 export interface Venta {
     idVenta: number;
-    idUsuario: number;
+    idUsuario: string;
     idSucursal: number;
     fechaHora: number;
     cliente: string;
@@ -12,6 +12,7 @@ export interface Venta {
     direccion: string;
     total: number;
     correo: string;
+    celular: string;
     serieFactura: string;
     numeroFactura: string;
     fechaFactura: number;

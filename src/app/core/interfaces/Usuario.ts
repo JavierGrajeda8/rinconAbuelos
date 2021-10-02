@@ -3,8 +3,8 @@ import { Sucursal } from './Sucursal';
 import { Venta } from './Venta';
 
 export interface Usuario {
-    idUsuario: number;
-    idSucursal: number;
+    idUsuario: string;
+    idSucursal?: number;
     nombre: string;
     alias: string;
     telefono: number;
@@ -14,4 +14,5 @@ export interface Usuario {
     ventas?: Venta[];
     gastos?: Gasto[];
     sucursal?: Sucursal;
+    password?: string;
 }

@@ -5,13 +5,13 @@
 export const environment = {
   production: false,
   firebaseConfig: {
-    apiKey: 'AIzaSyCCtejiJvqg3n0Xf76CDhJQ7lCoOLz1iY0',
-    authDomain: 'ingresapp-jg.firebaseapp.com',
-    databaseURL: 'https://ingresapp-jg.firebaseio.com',
-    projectId: 'ingresapp-jg',
-    storageBucket: 'ingresapp-jg.appspot.com',
-    messagingSenderId: '327251504047',
-    appId: '1:327251504047:web:7946057a40aee3412f9d5a',
+    apiKey: 'AIzaSyCAWjiglmk1-l2H9XUUpt9eK30uK4OdkAQ',
+    authDomain: 'rinconabuelos-6dbbf.firebaseapp.com',
+    projectId: 'rinconabuelos-6dbbf',
+    storageBucket: 'rinconabuelos-6dbbf.appspot.com',
+    messagingSenderId: '46968422960',
+    appId: '1:46968422960:web:19837aaf19208ab70aa3f5',
+    measurementId: 'G-CNVQWGYF5E',
   },
   // eslint-disable-next-line @typescript-eslint/naming-convention
   ReExSpaces: new RegExp(/[a-zA-Z ]*[^\s]+/),

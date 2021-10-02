@@ -12,5 +12,5 @@ export interface VentaDetalle {
     fechaHora: number;
     estado: number;
     venta?: Venta;
-    produto?: Producto;
+    producto?: Producto;
 }

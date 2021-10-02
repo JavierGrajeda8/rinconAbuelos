@@ -13,12 +13,19 @@
       <ion-col size="12">
         <ion-list>
           <ion-list>
-            <ion-item-sliding
-              *ngFor="let categoria of categorias"
-              (click)="irProducto(categoria)"
-            >
+            <ion-item-sliding *ngFor="let categoria of categorias">
               <ion-item>
-                <ion-icon slot="end" name="chevron-forward"></ion-icon>
+                <ion-icon
+                  (click)="agregarCategoria(categoria)"
+                  slot="end"
+                  name="create"
+                ></ion-icon>
+
+                <ion-icon
+                  (click)="irProducto(categoria)"
+                  slot="end"
+                  name="chevron-forward"
+                ></ion-icon>
                 <ion-label>
                   <ion-text color="secondary"> {{ categoria.nombre }}</ion-text>
                 </ion-label>
@@ -38,7 +45,7 @@
 <ion-footer>
   <ion-toolbar>
     <ion-buttons slot="end">
-      <ion-button color="success" (click)="agregarCategoria()">
+      <ion-button color="success" (click)="agregarCategoria(null)">
         <ion-icon slot="start" name="add"></ion-icon>
         Nueva categoría
       </ion-button>

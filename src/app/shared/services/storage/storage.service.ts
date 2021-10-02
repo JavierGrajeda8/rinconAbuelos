@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { Subject, Observable } from 'rxjs';
-import { isObject } from 'util';
 
 @Injectable({
   providedIn: 'root',
@@ -38,7 +36,7 @@ export class StorageService {
     return resp;
   }
 
-  get(key: string) {
+  get(key: string): Promise<string> {
     return new Promise((resolve, reject): any => {
       this.storage
         .get(key)

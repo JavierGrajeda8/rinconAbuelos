@@ -15,10 +15,10 @@
         <ion-input
           class="ion-text-end"
           placeholder="Ej. Mauricio Gómez"
-          [(ngModel)]="data.nombre"
-          #nombre="ngModel"
-          name="nombre"
-          id="nombre"
+          [(ngModel)]="data.cliente"
+          #cliente="ngModel"
+          name="cliente"
+          id="cliente"
           type="text"
           maxlength="75"
           required
@@ -34,7 +34,6 @@
           name="nit"
           id="nit"
           type="number"
-          required
         ></ion-input>
       </ion-item>
       <ion-item>
@@ -47,7 +46,6 @@
           name="direccion"
           id="direccion"
           type="number"
-          required
         ></ion-input>
       </ion-item>
       <ion-item>
@@ -96,7 +94,9 @@
         ></ion-datetime>
       </ion-item>
       <ion-item>
-        <ion-label>Descripcion ({{data.proveedor?.length}}/150)</ion-label>
+        <ion-label class="ion-text-wrap"
+          >Instrucciones ({{data.descripcion?.length}}/150)</ion-label
+        >
         <ion-textarea
           class="ion-text-end"
           placeholder="Ej. Agregar condimentos adicionales"
@@ -110,10 +110,10 @@
         ></ion-textarea>
       </ion-item>
       <ion-item>
-        <ion-label>Correo ({{data.proveedor?.length}}/80)</ion-label>
+        <ion-label>Correo ({{data.correo?.length}}/80)</ion-label>
         <ion-textarea
           class="ion-text-end"
-          placeholder="Ej. Agregar condimentos adicionales"
+          placeholder="Ej. cliente@gmail.com"
           [(ngModel)]="data.correo"
           #correo="ngModel"
           name="correo"
@@ -163,7 +163,7 @@
           >
           <ion-label
             ><ion-text color="primary">
-              <h5>{{detalle.producto.nombre}}</h5>
+              <h5>{{detalle.producto?.nombre}}</h5>
             </ion-text>
             <ion-text color="medium">
               <p>Costo: {{detalle.precioVenta}}</p>
@@ -176,34 +176,32 @@
             color="danger"
           ></ion-icon>
         </ion-item>
-        <ion-item>
-          <ion-label slot="start">
-            <ion-text color="tertiary">
-              <h2>Cantidad total:</h2>
-            </ion-text>
-          </ion-label>
-          <ion-label class="ion-text-wrap ion-text-end" slot="end">
-            <ion-text color="dark"> <b>{{data.cantidadTotal}}</b> </ion-text>
-          </ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-label slot="start">
-            <ion-text color="tertiary">
-              <h2>Venta total:</h2>
-            </ion-text>
-          </ion-label>
-          <ion-label class="ion-text-wrap ion-text-end" slot="end">
-            <ion-text color="dark">
-              <b>{{data.total | currency:'Q'}}</b>
-            </ion-text>
-          </ion-label>
-        </ion-item>
       </ng-container>
 
       <ng-container *ngIf="data.agregandoDetalle">
         <ion-grid fixed>
           <ion-row>
             <ion-col size="12">
+              <ion-item>
+                <ion-label
+                  >Categoría
+                  <ion-text color="danger">*</ion-text>
+                </ion-label>
+                <ion-select
+                  placeholder="Ej. Plato fuerte"
+                  (ionChange)="getProductos()"
+                  [(ngModel)]="dataDetalle.idCategoria"
+                  #idCategoria="ngModel"
+                  name="idCategoria"
+                  id="idCategoria"
+                >
+                  <ion-select-option
+                    *ngFor="let cat of categorias"
+                    value="{{cat.idCategoria}}"
+                    >{{cat.nombre}}</ion-select-option
+                  >
+                </ion-select>
+              </ion-item>
               <ion-item>
                 <ion-label
                   >Producto
@@ -219,8 +217,8 @@
                 >
                   <ion-select-option
                     *ngFor="let producto of productos"
-                    value="{{material.idMaterial}}"
-                    >{{material.producto}}</ion-select-option
+                    value="{{producto.idProducto}}"
+                    >{{producto.nombre}}</ion-select-option
                   >
                 </ion-select>
               </ion-item>
@@ -253,11 +251,18 @@
                   name="precioVenta"
                   id="precioVenta"
                   type="number"
+                  readonly
                   required
                 ></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label
+                  >Descuento
+                  <ion-text color="danger">*</ion-text>
+                </ion-label>
                 <ion-input
                   class="ion-text-end"
-                  placeholder="Ej. 10"
+                  placeholder="Ej. 0.10"
                   [(ngModel)]="dataDetalle.descuento"
                   #descuento="ngModel"
                   name="descuento"
@@ -266,7 +271,7 @@
                   required
                 ></ion-input>
               </ion-item>
-              
+
               <ion-item>
                 <ion-button
                   slot="end"
@@ -298,7 +303,25 @@
 
 <ion-footer>
   <ion-toolbar>
-    <ion-grid fixed>
+    <ion-list>
+      <ion-item>
+        <ion-label slot="start" class="ion-text-wrap">
+          <ion-text color="tertiary">
+            <h2>Totales</h2>
+          </ion-text>
+        </ion-label>
+        <ion-label class="ion-text-wrap ion-text-end" slot="start">
+          <ion-text color="dark"> <b>{{data.cantidadTotal}}</b> </ion-text>
+        </ion-label>
+        <ion-label class="ion-text-wrap ion-text-end" slot="end">
+          <ion-text color="dark">
+            <b>{{data.total | currency:'Q'}}</b>
+          </ion-text>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+    <ion-grid>
       <ion-row>
         <ion-col size="6">
           <ion-button
@@ -313,7 +336,7 @@
         </ion-col>
         <ion-col size="6">
           <ion-button
-            (click)="cancelar()"
+            (click)="guardar()"
             color="primary"
             expand="block"
             shape="round"
