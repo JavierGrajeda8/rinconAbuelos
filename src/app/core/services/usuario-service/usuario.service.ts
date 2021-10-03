@@ -62,11 +62,11 @@ export class UsuarioService {
         .then((data) => {
           this.get(correo)
             .then((user: any) => {
-              this.storage.set(
-                ConstStrings.str.storage.user,
-                JSON.stringify(user.data())
-              );
-              resolve(user);
+              this.storage
+                .set(ConstStrings.str.storage.user, JSON.stringify(user.data()))
+                .then(() => {
+                  resolve(user);
+                });
             })
             .catch((error) => {
               reject(error);
