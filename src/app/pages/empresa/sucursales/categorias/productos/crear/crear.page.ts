@@ -113,7 +113,9 @@ export class CrearPage implements OnInit {
 
         console.log(materiales);
         materiales.forEach((mat) => {
-          this.materiales.push(mat as Material);
+          if (mat.estado !== ConstStatus.eliminado) {
+            this.materiales.push(mat as Material);
+          }
         });
         this.materiales = this.materiales.sort((a, b) =>
           b.nombre < a.nombre ? 1 : -1
@@ -127,7 +129,9 @@ export class CrearPage implements OnInit {
       .subscribe((categorias) => {
         this.categorias = [];
         categorias.forEach((cat) => {
-          this.categorias.push(cat as Categoria);
+          if (cat.estado !== ConstStatus.eliminado) {
+            this.categorias.push(cat as Categoria);
+          }
         });
         this.categorias = this.categorias.sort((a, b) =>
           b.nombre < a.nombre ? 1 : -1
@@ -166,7 +170,9 @@ export class CrearPage implements OnInit {
           handler: () => {
             this.data.detalle.splice(
               this.data.detalle.indexOf(
-                this.data.detalle.find((r) => r.id === detalle.id)
+                this.data.detalle.find(
+                  (r) => r.idMaterial === detalle.idMaterial
+                )
               ),
               1
             );

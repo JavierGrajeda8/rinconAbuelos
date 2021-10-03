@@ -106,7 +106,6 @@
           id="descripcion"
           type="text"
           maxlength="150"
-          required
         ></ion-textarea>
       </ion-item>
       <ion-item>
@@ -120,7 +119,6 @@
           id="correo"
           type="email"
           maxlength="80"
-          required
         ></ion-textarea>
       </ion-item>
       <ion-item>
@@ -133,7 +131,6 @@
           name="celular"
           id="celular"
           type="number"
-          required
         ></ion-textarea>
       </ion-item>
 
@@ -285,6 +282,7 @@
 
                 <ion-button
                   slot="end"
+                  [disabled]="!dataDetalle.precioVenta || !dataDetalle.cantidad || !dataDetalle.idProducto || !dataDetalle.idCategoria"
                   color="secondary"
                   (click)="agregarDetalle()"
                   fill="outline"

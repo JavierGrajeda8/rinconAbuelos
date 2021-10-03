@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
+import { ConstStatus } from 'src/app/core/constants/constStatus';
 import { ConstStrings } from 'src/app/core/constants/constStrings';
 import { Categoria } from 'src/app/core/interfaces/Categoria';
 import { Producto } from 'src/app/core/interfaces/Producto';
@@ -21,7 +22,8 @@ export class HomePage implements OnInit {
   constructor(
     private nav: NavController,
     private storage: StorageService,
-    private productoService: ProductoService
+    private productoService: ProductoService,
+    private alertController: AlertController
   ) {}
 
   ngOnInit() {}
@@ -51,7 +53,9 @@ export class HomePage implements OnInit {
         console.log('productos', productos);
         this.productos = [];
         productos.forEach((producto) => {
-          this.productos.push(producto as Producto);
+          if (producto.estado !== ConstStatus.eliminado) {
+            this.productos.push(producto as Producto);
+          }
         });
       });
   }
@@ -63,5 +67,37 @@ export class HomePage implements OnInit {
       JSON.stringify(producto)
     );
     this.nav.navigateForward('empresas/sucursal/categorias/productos/crear');
+  }
+
+  async borrar(producto: Producto) {
+    const alert = await this.alertController.create({
+      header: 'Eliminar categoría',
+      message:
+        '¿Estás seguro que deseas eliminar el producto <strong>' +
+        producto.nombre +
+        '</strong>?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Confirm Cancel: blah');
+          },
+        },
+        {
+          text: 'Eliminar',
+          handler: () => {
+            this.productoService
+              .deleteProducto(this.usuario, producto)
+              .then(() => {
+                this.getProductos();
+              });
+            console.log('Confirm Okay', producto.idProducto);
+          },
+        },
+      ],
+    });
+    alert.present();
   }
 }

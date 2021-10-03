@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
+import { ConstStatus } from 'src/app/core/constants/constStatus';
 import { ConstStrings } from 'src/app/core/constants/constStrings';
 import { Usuario } from 'src/app/core/interfaces/Usuario';
 import { Venta } from 'src/app/core/interfaces/Venta';
@@ -19,7 +20,8 @@ export class HomePage implements OnInit {
   constructor(
     private nav: NavController,
     private storage: StorageService,
-    private ventaService: VentaService
+    private ventaService: VentaService,
+    private alertController: AlertController
   ) {}
 
   ngOnInit() {}
@@ -45,12 +47,44 @@ export class HomePage implements OnInit {
 
         console.log(ventas);
         ventas.forEach((ven) => {
-          this.ventas.push(ven as Venta);
+          if (ven.estado !== ConstStatus.eliminado) {
+            this.ventas.push(ven as Venta);
+          }
         });
         this.ventas = this.ventas.sort((a, b) =>
           b.fechaFactura < a.fechaFactura ? 1 : -1
         );
       });
+  }
+
+  async borrar(venta: Venta) {
+    const alert = await this.alertController.create({
+      header: 'Eliminar categoría',
+      message:
+        '¿Estás seguro que deseas eliminar la venta del cliente <strong>' +
+        venta.cliente +
+        '</strong>?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Confirm Cancel: blah');
+          },
+        },
+        {
+          text: 'Eliminar',
+          handler: () => {
+            this.ventaService.deleteVenta(this.usuario, venta).then(() => {
+              this.getVentas();
+            });
+            console.log('Confirm Okay', venta.idVenta);
+          },
+        },
+      ],
+    });
+    alert.present();
   }
 
   private async gestionarVenta(venta: Venta) {

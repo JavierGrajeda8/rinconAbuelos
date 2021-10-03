@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
+import { ConstStatus } from 'src/app/core/constants/constStatus';
 import { ConstStrings } from 'src/app/core/constants/constStrings';
 import { Gasto } from 'src/app/core/interfaces/Gasto';
 import { Usuario } from 'src/app/core/interfaces/Usuario';
@@ -19,7 +20,8 @@ export class HomePage implements OnInit {
   constructor(
     private nav: NavController,
     private storage: StorageService,
-    private gastoService: GastoService
+    private gastoService: GastoService,
+    private alertController: AlertController
   ) {}
 
   ngOnInit() {}
@@ -45,12 +47,44 @@ export class HomePage implements OnInit {
 
         console.log(gastos);
         gastos.forEach((gas) => {
-          this.gastos.push(gas as Gasto);
+          if (gas.estado !== ConstStatus.eliminado){
+            this.gastos.push(gas as Gasto);
+          }
         });
         this.gastos = this.gastos.sort((a, b) =>
           b.fechaFactura < a.fechaFactura ? 1 : -1
         );
       });
+  }
+
+  async borrar(gasto: Gasto) {
+    const alert = await this.alertController.create({
+      header: 'Eliminar categoría',
+      message:
+        '¿Estás seguro que deseas eliminar el gasto del proveedor <strong>' +
+        gasto.proveedor +
+        '</strong>?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Confirm Cancel: blah');
+          },
+        },
+        {
+          text: 'Eliminar',
+          handler: () => {
+            this.gastoService.deleteGasto(this.usuario, gasto).then(() => {
+              this.getGastos();
+            });
+            console.log('Confirm Okay', gasto.idGasto);
+          },
+        },
+      ],
+    });
+    alert.present();
   }
 
   private async gestionarGasto(gasto: Gasto) {

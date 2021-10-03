@@ -114,7 +114,9 @@ export class CrearPage implements OnInit {
 
         console.log(materiales);
         materiales.forEach((mat) => {
-          this.materiales.push(mat as Material);
+          if (mat.estado !== ConstStatus.eliminado) {
+            this.materiales.push(mat as Material);
+          }
         });
         this.materiales = this.materiales.sort((a, b) =>
           b.nombre < a.nombre ? 1 : -1
@@ -164,12 +166,15 @@ export class CrearPage implements OnInit {
           handler: () => {
             this.data.detalle.splice(
               this.data.detalle.indexOf(
-                this.data.detalle.find((r) => r.id === detalle.id)
-              )
+                this.data.detalle.find(
+                  (r) => r.idGastoDetalle === detalle.idGastoDetalle
+                )
+              ),
+              1
             );
             this.calcularTotal();
 
-            console.log('Confirm Okay', detalle.id);
+            console.log('Confirm Okay', detalle.idGastoDetalle);
           },
         },
       ],
@@ -186,6 +191,7 @@ export class CrearPage implements OnInit {
     const fechaC = new Date(this.dataDetalle.fechaCaducidad);
 
     this.data.detalle.push({
+      idGastoDetalle: Date.now(),
       idGasto: 1,
       idMaterial: this.dataDetalle.idMaterial,
       descripcion: '',
@@ -246,7 +252,7 @@ export class CrearPage implements OnInit {
 
     this.data.detalle.forEach((detalle) => {
       gasto.detalle.push({
-        idGastoDetalle: Date.now(),
+        idGastoDetalle: detalle.idGastoDetalle,
         idGasto: gasto.idGasto,
         idMaterial: detalle.idMaterial,
         descripcion: '',

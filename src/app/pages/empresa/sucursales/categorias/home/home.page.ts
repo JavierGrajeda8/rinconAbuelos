@@ -46,7 +46,9 @@ export class HomePage implements OnInit {
 
         console.log(categorias);
         categorias.forEach((cat) => {
-          this.categorias.push(cat as Categoria);
+          if (cat.estado !== ConstStatus.eliminado) {
+            this.categorias.push(cat as Categoria);
+          }
         });
         this.categorias = this.categorias.sort((a, b) =>
           b.nombre < a.nombre ? 1 : -1
@@ -132,6 +134,11 @@ export class HomePage implements OnInit {
         {
           text: 'Eliminar',
           handler: () => {
+            this.productoService
+              .deleteCategoria(this.usuario, categoria)
+              .then(() => {
+                this.getCategorias();
+              });
             console.log('Confirm Okay', categoria.idCategoria);
           },
         },

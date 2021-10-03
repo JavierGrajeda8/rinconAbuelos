@@ -11,6 +11,7 @@ import { Categoria } from 'src/app/core/interfaces/Categoria';
 import { Producto } from 'src/app/core/interfaces/Producto';
 import { Usuario } from 'src/app/core/interfaces/Usuario';
 import { Venta } from 'src/app/core/interfaces/Venta';
+import { MaterialService } from 'src/app/core/services/materiales/material.service';
 import { ProductoService } from 'src/app/core/services/productos/producto.service';
 import { VentaService } from 'src/app/core/services/ventas/venta.service';
 import { StorageService } from 'src/app/shared/services/storage/storage.service';
@@ -69,7 +70,8 @@ export class CrearPage implements OnInit {
     private productoService: ProductoService,
     private ventaService: VentaService,
     private storage: StorageService,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private materialService: MaterialService
   ) {}
 
   ngOnInit() {}
@@ -119,6 +121,13 @@ export class CrearPage implements OnInit {
 
   mostrarForm() {
     this.data.agregandoDetalle = !this.data.agregandoDetalle;
+    if (!this.data.agregandoDetalle) {
+      this.dataDetalle.idCategoria = null;
+      this.dataDetalle.idProducto = null;
+      this.dataDetalle.cantidad = null;
+      this.dataDetalle.precioVenta = null;
+      this.dataDetalle.descuento = 0;
+    }
   }
 
   elegirProducto() {
@@ -137,7 +146,9 @@ export class CrearPage implements OnInit {
 
         console.log(categorias);
         categorias.forEach((cat) => {
-          this.categorias.push(cat as Categoria);
+          if (cat.estado !== ConstStatus.eliminado) {
+            this.categorias.push(cat as Categoria);
+          }
         });
         this.categorias = this.categorias.sort((a, b) =>
           b.nombre < a.nombre ? 1 : -1
@@ -156,7 +167,9 @@ export class CrearPage implements OnInit {
         console.log('productos', productos);
         this.productos = [];
         productos.forEach((producto) => {
-          this.productos.push(producto as Producto);
+          if (producto.estado !== ConstStatus.eliminado) {
+            this.productos.push(producto as Producto);
+          }
         });
       });
   }
@@ -184,12 +197,15 @@ export class CrearPage implements OnInit {
           handler: () => {
             this.data.detalle.splice(
               this.data.detalle.indexOf(
-                this.data.detalle.find((r) => r.id === detalle.id)
-              )
+                this.data.detalle.find(
+                  (r) => r.idVentaDetalle === detalle.idVentaDetalle
+                )
+              ),
+              1
             );
             this.calcularTotal();
 
-            console.log('Confirm Okay', detalle.id);
+            console.log('Confirm Okay', detalle.idVentaDetalle);
           },
         },
       ],
@@ -247,7 +263,7 @@ export class CrearPage implements OnInit {
     }
 
     const venta: Venta = {
-      idVenta: Date.now(),
+      idVenta,
       idUsuario: this.usuario.idUsuario,
       idSucursal: this.usuario.idSucursal,
       fechaHora: Date.now(),
@@ -285,6 +301,16 @@ export class CrearPage implements OnInit {
 
     console.log('Información a grabar', venta);
     await this.ventaService.setVenta(this.usuario, venta);
+    venta.ventaDetalle.forEach((v) => {
+      v.producto.detalle.forEach((p) => {
+        console.log('producto', p);
+        this.materialService.updateMaterial(
+          this.usuario,
+          p.idMaterial,
+          p.cantidad * v.cantidad
+        );
+      });
+    });
 
     const toast = await this.toastController.create({
       header: 'Venta almacenada',
