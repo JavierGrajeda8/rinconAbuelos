@@ -51,7 +51,9 @@ export class RegistroPage implements OnInit {
     this.usuarioService
       .registrar(usr)
       .then(() => {
-        this.nav.navigateRoot('empresas');
+        setTimeout(() => {
+          this.nav.navigateRoot('empresas');
+        }, 500);
       })
       .catch((error) => {
         this.mensaje = error;
