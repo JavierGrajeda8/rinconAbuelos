@@ -223,7 +223,7 @@ export class CrearPage implements OnInit {
   calcularCosto() {
     this.data.costo = null;
     this.data.detalle.forEach((detalle) => {
-      this.data.costo += detalle.costoPromedio;
+      this.data.costo += detalle.costoPromedio * detalle.cantidad;
     });
   }
 
