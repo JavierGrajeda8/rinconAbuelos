@@ -45,6 +45,11 @@ export class ProductoService {
   }
 
   public setProducto(usuario: Usuario, producto: Producto) {
+    this.firestore
+    .collection('productos')
+    .doc(producto.idProducto.toString())
+    .set(producto);
+
     return this.firestore
       .collection('empresas')
       .doc(usuario.sucursal.idEmpresa.toString())

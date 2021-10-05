@@ -21,6 +21,11 @@ export class VentaService {
   }
 
   public setVenta(usuario: Usuario, venta: Venta) {
+    this.firestore
+      .collection('ventas')
+      .doc(venta.idVenta.toString())
+      .set(venta);
+
     return this.firestore
       .collection('empresas')
       .doc(usuario.sucursal.idEmpresa.toString())

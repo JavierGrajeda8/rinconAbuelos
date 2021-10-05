@@ -12,6 +12,11 @@ export class MaterialService {
   constructor(private firestore: AngularFirestore) {}
 
   public setMaterial(usuario: Usuario, material: Material) {
+    this.firestore
+    .collection('materiales')
+    .doc(material.idMaterial.toString())
+    .set(material);
+
     return this.firestore
       .collection('empresas')
       .doc(usuario.sucursal.idEmpresa.toString())

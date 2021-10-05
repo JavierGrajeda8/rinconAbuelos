@@ -33,6 +33,11 @@ export class GastoService {
   }
 
   public setGasto(usuario: Usuario, gasto: Gasto) {
+    this.firestore
+      .collection('gastos')
+      .doc(gasto.idGasto.toString())
+      .set(gasto);
+
     return this.firestore
       .collection('empresas')
       .doc(usuario.sucursal.idEmpresa.toString())

@@ -36,6 +36,7 @@ export class UsuarioService {
   }
 
   getEmpresasAcceso(usuario: Usuario) {
+    console.log('usuario0', usuario);
     return this.firestore
       .collection('usuario')
       .doc(usuario.idUsuario)
@@ -89,6 +90,38 @@ export class UsuarioService {
             .doc(usuario.correo)
             .set(usuario)
             .then(() => {
+              const accesos = {
+                accesos: ['rinconabuelos'],
+                idAcceso: Date.now(),
+              };
+              this.firestore
+                .collection('usuario')
+                .doc(usuario.correo)
+                .collection('empresas')
+                .doc('acceso')
+                .set(accesos);
+
+              this.firestore
+                .collection('empresas')
+                .doc('rinconabuelos')
+                .collection('usuarios')
+                .doc(usuario.correo)
+                .set({ accesos: ['1615701600001'], idUsuario: usuario.correo });
+              const accesos3 = {
+                accesos: {
+                  accesos: ['1615701600001'],
+                  idAcceso: Date.now(),
+                },
+              };
+              this.firestore
+                .collection('empresas')
+                .doc('rinconabuelos')
+                .collection('usuarios')
+                .doc(usuario.correo)
+                .collection('accesos')
+                .doc('1615701600001')
+                .set(accesos3);
+
               this.storage.set(
                 ConstStrings.str.storage.user,
                 JSON.stringify(usuario)

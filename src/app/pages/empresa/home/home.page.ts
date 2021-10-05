@@ -26,6 +26,7 @@ export class HomePage implements OnInit {
     this.storage.get(ConstStrings.str.storage.user).then((usuario: string) => {
       this.usuario = JSON.parse(usuario) as Usuario;
       this.usuarioService.getEmpresasAcceso(this.usuario).then((accesos) => {
+        console.log('accesos0', accesos);
         if (accesos.exists) {
           const accesosAux = accesos.data().accesos;
           console.log('accesos', accesosAux);
