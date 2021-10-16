@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { ConstStatus } from '../../constants/constStatus';
 import { Gasto } from '../../interfaces/Gasto';
 import { Usuario } from '../../interfaces/Usuario';

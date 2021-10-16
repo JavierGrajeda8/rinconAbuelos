@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { StorageService } from 'src/app/shared/services/storage/storage.service';
 import { ConstStrings } from '../../constants/constStrings';
 import { Usuario } from '../../interfaces/Usuario';
